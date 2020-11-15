@@ -24,4 +24,9 @@ class User extends Authenticatable
         'full_name',        
         'profile_picture',
     ];
+
+    public function post()
+    {
+        return $this->hasMany(Post::class);
+    }
 }
