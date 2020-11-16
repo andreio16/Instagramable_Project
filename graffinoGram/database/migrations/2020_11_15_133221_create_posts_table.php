@@ -21,7 +21,9 @@ class CreatePostsTable extends Migration
             $table->string('created_time');
             $table->text('tags');
             $table->string('likes');
-            $table->string('images');
+            $table->string('image');
+            $table->integer('image_width');
+            $table->integer('image_height');
             $table->timestamps();
 
             $table->unsignedBigInteger('user_id');    

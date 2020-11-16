@@ -88,8 +88,8 @@ class import extends Command
 
                 $postHashtags = $this->concatenatePostTags($obj->tags);
 
-                DB::insert('insert into posts (id, type, link, filter, created_time, tags, likes, images, user_id)
-                values (?,?,?,?,?,?,?,?,?)',[
+                DB::insert('insert into posts (id, type, link, filter, created_time, tags, likes, image, image_width, image_height, user_id)
+                values (?,?,?,?,?,?,?,?,?,?,?)',[
                     $obj->id,
                     isset($obj->type) ? $obj->type : NULL,
                     isset($obj->link) ? $obj->link : NULL,
@@ -97,7 +97,11 @@ class import extends Command
                     isset($obj->created_time) ? $obj->created_time : NULL,
                     isset($obj->tags)? $postHashtags : NULL,
                     isset($obj->likes->count)? $obj->likes->count : NULL,
-                    isset($obj->images->standard_resolution->url)? $obj->images->standard_resolution->url : NULL,
+                    isset($obj->images->low_resolution->url)? $obj->images->low_resolution->url : NULL,
+                    isset($obj->images->low_resolution->width)? $obj->images->low_resolution->width : 150,
+                    isset($obj->images->low_resolution->height)? $obj->images->low_resolution->height : 150,
+
+                    //  
                     $obj->user->id ,
                 ]);
 
