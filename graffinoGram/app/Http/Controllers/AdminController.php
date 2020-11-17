@@ -16,4 +16,14 @@ class AdminController extends Controller
             'posts' => $posts
         ]);
     }
+
+    public function view($id)
+    {   
+        $post = Post::findOrFail($id);
+        
+        return view('postView', [
+            'post' => $post
+        ]);
+    }
+
 }

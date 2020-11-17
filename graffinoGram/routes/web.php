@@ -13,3 +13,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'AdminController@index');
+
+
+Route::get('/postView/{id}', 'AdminController@view');

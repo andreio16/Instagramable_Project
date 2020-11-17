@@ -78,6 +78,13 @@ class import extends Command
         return $tagResult;
     }
 
+    private function getPostID($post)
+    {
+        $post = explode('_', $post);
+        return gmp_intval(gmp_init($post[0]));
+        //return doubleval($post[0]);
+    }
+
     private function extractPosts($data)
     {
         $uniquePosts = array();
@@ -90,7 +97,7 @@ class import extends Command
 
                 DB::insert('insert into posts (id, type, link, filter, created_time, tags, likes, image, image_width, image_height, user_id)
                 values (?,?,?,?,?,?,?,?,?,?,?)',[
-                    $obj->id,
+                    $this->getPostID($obj->id),
                     isset($obj->type) ? $obj->type : NULL,
                     isset($obj->link) ? $obj->link : NULL,
                     isset($obj->filter) ? $obj->filter : NULL,
@@ -161,7 +168,4 @@ class import extends Command
             $this->info("\n".'JSON File cannot be fetched! [WARNING]: Ambiguous file structure'."\n");
         }
     }
-
-
-
 }

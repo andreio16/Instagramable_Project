@@ -14,7 +14,7 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->string('id')->require();
+            $table->id()->require();
             $table->string('type');
             $table->string('link');
             $table->string('filter');

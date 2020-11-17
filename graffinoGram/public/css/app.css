@@ -1,3 +1,7 @@
 #post-size{
-    width: 200px;
+    width: 16.25rem;
+}
+
+img, .profile-picture{
+    border-radius: 50%;
 }
