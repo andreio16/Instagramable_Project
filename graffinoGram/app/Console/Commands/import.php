@@ -74,7 +74,7 @@ class import extends Command
     {
         $tagResult = '';
         foreach($tagVector as $tagElement)
-            $tagResult = $tagResult . $tagElement . ' ';
+            $tagResult = $tagResult . '#'. $tagElement . ' ';
         return $tagResult;
     }
 
