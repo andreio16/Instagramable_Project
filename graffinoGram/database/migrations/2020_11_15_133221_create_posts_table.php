@@ -15,13 +15,14 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id()->require();
+            $table->text('tags');
             $table->string('type');
             $table->string('link');
-            $table->string('filter');
-            $table->string('created_time');
-            $table->text('tags');
+            $table->text('caption');
             $table->string('likes');
             $table->string('image');
+            $table->string('filter');
+            $table->string('created_time');
             $table->integer('image_width');
             $table->integer('image_height');
             $table->timestamps();

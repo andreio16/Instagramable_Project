@@ -15,27 +15,19 @@
                         <a href="/postView/{{$post->id}}"><img src="{{$post->image}}" width="{{$post->image_width}}" height="{{$post->image_height}}"></a>
                     </div>
 
-                    <div class="ml-11">
+                    <div class="ml-10">
                         <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                        @if($post->likes == "1")
-                            {{$post->likes}} like
-                            @else
-                            {{$post->likes}}  likes
-                        @endif
-
-                        {{$post->id}}
+                            @if($post->likes == "1")
+                                {{$post->likes}} like
+                                @else
+                                {{$post->likes}}  likes
+                            @endif
                         </div>
                     </div>
 
-                    <div class="ml-12">
+                    <div class="ml-11">
                         <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm" id="post-size">
-                            {{$post->user->username}}: Caption post Example here!
-                        </div>
-                    </div>
-
-                    <div class="ml-12">
-                        <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm" id="post-size">
-                            {{$post->tags}}
+                            <b>{{$post->user->username}}</b>  {{$post->caption}}
                         </div>
                     </div>
 

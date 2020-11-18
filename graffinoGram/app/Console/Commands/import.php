@@ -74,7 +74,7 @@ class import extends Command
     {
         $tagResult = '';
         foreach($tagVector as $tagElement)
-            $tagResult = $tagResult . '#'. $tagElement . ' ';
+            $tagResult = $tagResult . $tagElement . ' ';
         return $tagResult;
     }
 
@@ -92,26 +92,25 @@ class import extends Command
         {
             if((empty($uniquePosts) == true) OR (in_array($obj->id, $uniquePosts) == false))
              {
-
                 $postHashtags = $this->concatenatePostTags($obj->tags);
-
-                DB::insert('insert into posts (id, type, link, filter, created_time, tags, likes, image, image_width, image_height, user_id)
-                values (?,?,?,?,?,?,?,?,?,?,?)',[
+                
+                DB::insert('insert into posts (id, type, link, filter, created_time, tags, caption, likes, image, image_width, image_height, user_id)
+                values (?,?,?,?,?,?,?,?,?,?,?,?)',[
                     $this->getPostID($obj->id),
                     isset($obj->type) ? $obj->type : NULL,
                     isset($obj->link) ? $obj->link : NULL,
                     isset($obj->filter) ? $obj->filter : NULL,
                     isset($obj->created_time) ? $obj->created_time : NULL,
                     isset($obj->tags)? $postHashtags : NULL,
+                    is_null($obj->caption)? " " : $obj->caption->text,
                     isset($obj->likes->count)? $obj->likes->count : NULL,
                     isset($obj->images->low_resolution->url)? $obj->images->low_resolution->url : NULL,
                     isset($obj->images->low_resolution->width)? $obj->images->low_resolution->width : 150,
                     isset($obj->images->low_resolution->height)? $obj->images->low_resolution->height : 150,
 
-                    //  
-                    $obj->user->id ,
+                    $obj->user->id,
                 ]);
-
+                        
                 array_push($uniquePosts, $obj->id);
             }           
         }
