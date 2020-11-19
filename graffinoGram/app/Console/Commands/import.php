@@ -60,13 +60,13 @@ class import extends Command
         $counter = 0;
         $existingUsers = DB::table('users')->select('id')->get();
         foreach ($existingUsers as $users) 
-        {
+        {  
             foreach($data as $obj)
                 if($obj->user->id == $users->id)
                     $counter++;
-         }
-         if($counter == count($existingUsers) AND $counter != 0) return true;
-        else return false; 
+        }
+          if($counter <= count($existingUsers) AND $counter != 0) return true;
+         else return false; 
     }
 
 
@@ -81,9 +81,7 @@ class import extends Command
     private function getPostID($post)
     {
         $post = explode('_', $post);
-        //return gmp_intval(gmp_init($post[0]));
-        //return doubleval($post[0]);
-        return $post[0];
+        return gmp_intval(gmp_init($post[0]));
     }
 
     private function extractPosts($data)
@@ -194,13 +192,12 @@ class import extends Command
         else
             $this->extractUsers($jsonObj->data);
 
-
         if( $this->checkExistingPosts($jsonObj->data) == true)
             $this->info('Posts table is already up to date!');
         else
         {
             $this->extractPosts($jsonObj->data);
-            //$this->extractComments($jsonObj->data);
+            $this->extractComments($jsonObj->data);
         }
 
     }
