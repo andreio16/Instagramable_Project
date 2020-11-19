@@ -65,7 +65,7 @@ class import extends Command
                 if($obj->user->id == $users->id)
                     $counter++;
          }
-        if($counter != 0) return true;
+         if($counter == count($existingUsers) AND $counter != 0) return true;
         else return false; 
     }
 
@@ -82,7 +82,8 @@ class import extends Command
     {
         $post = explode('_', $post);
         //return gmp_intval(gmp_init($post[0]));
-        return doubleval($post[0]);
+        //return doubleval($post[0]);
+        return $post[0];
     }
 
     private function extractPosts($data)
@@ -109,8 +110,7 @@ class import extends Command
                     isset($obj->images->low_resolution->height)? $obj->images->low_resolution->height : 150,
 
                     $obj->user->id,
-                ]);
-                        
+                ]);        
                 array_push($uniquePosts, $obj->id);
             }           
         }
@@ -120,14 +120,14 @@ class import extends Command
     private function checkExistingPosts($data)
     {
         $counter = 0;
-        $existingPosts = DB::table('posts')->select('id')->get();
+        $existingPosts = DB::table('posts')->pluck('id');
         foreach ($existingPosts as $posts) 
         {
             foreach($data as $obj)
-                if($obj->id == $posts->id)
+                if( $this->getPostID($obj->id) == $posts)
                     $counter++;
-         }
-        if($counter == count($existingPosts) AND $counter != 0) return true;
+        }
+        if($counter >= count($existingPosts) AND $counter != 0) return true;
         else return false;        
     }
 
@@ -154,7 +154,6 @@ class import extends Command
                         $obj->comments->data[$i]->from->id,
                     ]);
                 }
-
 
             }
         }
@@ -189,20 +188,21 @@ class import extends Command
    }
 
     private function runImport($jsonObj)
-    {
+     {
         if($this->checkExistingUsers($jsonObj->data) == true)
             $this->info('Users table is already up to date!');
         else
             $this->extractUsers($jsonObj->data);
 
 
-        if($this->checkExistingPosts($jsonObj->data) == true)
+        if( $this->checkExistingPosts($jsonObj->data) == true)
             $this->info('Posts table is already up to date!');
         else
         {
-            $this->extractComments($jsonObj->data);
-            //$this->extractPosts($jsonObj->data);
+            $this->extractPosts($jsonObj->data);
+            //$this->extractComments($jsonObj->data);
         }
+
     }
 
     /**
