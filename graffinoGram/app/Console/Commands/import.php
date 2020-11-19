@@ -65,7 +65,7 @@ class import extends Command
                 if($obj->user->id == $users->id)
                     $counter++;
          }
-        if($counter == count($existingUsers) AND $counter != 0) return true;
+        if($counter != 0) return true;
         else return false; 
     }
 
@@ -81,8 +81,8 @@ class import extends Command
     private function getPostID($post)
     {
         $post = explode('_', $post);
-        return gmp_intval(gmp_init($post[0]));
-        //return doubleval($post[0]);
+        //return gmp_intval(gmp_init($post[0]));
+        return doubleval($post[0]);
     }
 
     private function extractPosts($data)
@@ -131,6 +131,63 @@ class import extends Command
         else return false;        
     }
 
+   private function extractComments($json)
+   {  
+       $existedComments =  count(DB::table('users')->pluck('username'));
+        foreach($json as $obj)
+        {
+            if($obj->comments->count != 0)
+            {
+                for($i=0; $i<count($obj->comments->data); $i++)
+                {
+                     $this->checkAndAddUser($obj->comments->data[$i]->from);
+
+                    DB::insert('insert into comments (id, text, count, created_time, post_id, user_id)
+                    values (?,?,?,?,?,?)',[
+
+                        $obj->comments->data[$i]->id,           
+                        $obj->comments->data[$i]->text,         
+                        $obj->comments->count,                  
+                        $obj->comments->data[$i]->created_time,
+                        
+                        $this->getPostID($obj->id),
+                        $obj->comments->data[$i]->from->id,
+                    ]);
+                }
+
+
+            }
+        }
+   }
+
+   private function checkAndAddUser($unknownUser)
+   {
+        $existingUsernames = DB::table('users')->pluck('username');
+        $flag = false;
+
+        foreach($existingUsernames as $name)
+        {
+            if($unknownUser->username == $name)
+            {
+                $this->info("Duplicates deleted ". $unknownUser->username ." ".  $name);
+                $flag = true;
+            }
+        }           
+        
+        if($flag == false)
+        {
+            DB::insert('insert into users (id, username, full_name, profile_picture)
+                values (?,?,?,?)',[
+                    $unknownUser->id,
+                    $unknownUser->username,
+                    $unknownUser->full_name,
+                    $unknownUser->profile_picture,
+                ]);
+                
+            $this->info("Comment dependence fixed!");
+        }    
+   }
+
     private function runImport($jsonObj)
     {
         if($this->checkExistingUsers($jsonObj->data) == true)
@@ -142,7 +199,10 @@ class import extends Command
         if($this->checkExistingPosts($jsonObj->data) == true)
             $this->info('Posts table is already up to date!');
         else
-            $this->extractPosts($jsonObj->data);
+        {
+            $this->extractComments($jsonObj->data);
+            //$this->extractPosts($jsonObj->data);
+        }
     }
 
     /**
