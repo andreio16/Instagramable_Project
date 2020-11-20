@@ -33,7 +33,13 @@
 
                     <div class="ml-12">
                         <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm" id="post-size">
-                            <a href="%" class="underline">View all X comments</a>
+                            <a href="%" class="underline">
+                                @if($post->comment_id != null)
+                                    View all {{$post->comment->count}} comments
+                                    @else
+                                    Be the first to comment!
+                                @endif 
+                            </a>
                         </div>
                     </div>
                 </div>                        

@@ -16,3 +16,6 @@ Route::get('/', 'AdminController@index');
 
 
 Route::get('/postView/{id}', 'AdminController@view');
+
+
+Route::get('/commentView/{id}', 'AdminController@viewComments');

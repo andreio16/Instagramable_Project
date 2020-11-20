@@ -29,6 +29,9 @@ class CreatePostsTable extends Migration
 
             $table->unsignedBigInteger('user_id');    
             $table->index('user_id');
+
+            $table->unsignedBigInteger('comment_id')->nullable();    
+            $table->index('comment_id');
         });
     }
 

@@ -140,17 +140,21 @@ class import extends Command
                 {
                      $this->checkAndAddUser($obj->comments->data[$i]->from);
 
-                    DB::insert('insert into comments (id, text, count, created_time, post_id, user_id)
-                    values (?,?,?,?,?,?)',[
-
+                    DB::insert('insert into comments (id, text, count, created_time, user_id)   
+                    values (?,?,?,?,?)',[
+                                                                                    // post_id, + ?
                         $obj->comments->data[$i]->id,           
                         $obj->comments->data[$i]->text,         
                         $obj->comments->count,                  
                         $obj->comments->data[$i]->created_time,
                         
-                        $this->getPostID($obj->id),
+                        //$this->getPostID($obj->id),
                         $obj->comments->data[$i]->from->id,
                     ]);
+
+                    DB::table('posts')
+                        ->where('id', $this->getPostID($obj->id))
+                        ->update(['comment_id' => $obj->comments->data[$i]->id]);
                 }
 
             }

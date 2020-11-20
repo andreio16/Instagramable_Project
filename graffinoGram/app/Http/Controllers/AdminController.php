@@ -26,4 +26,8 @@ class AdminController extends Controller
         ]);
     }
 
+    public function viewComments($id)
+    {   
+        # code...
+    }
 }
