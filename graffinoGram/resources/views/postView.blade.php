@@ -31,10 +31,15 @@
                 </div>
 
                 <div class="ml-12">
-                    <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm" id="post-size">
-                        <a href="%" class="underline">View all X comments</a>
+                    <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm" id="post-size">                            
+                        @if($post->comment_id != null)
+                            <a href="/commentView/{{$post->id}}" class="underline"> View all {{$post->comment->count}} comments </a>
+                            @else
+                            0 comments so far!
+                        @endif                             
                     </div>
-                </div>  
+                </div> 
+
             </div>                        
         </div>
     </div>

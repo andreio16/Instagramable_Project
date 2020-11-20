@@ -23,9 +23,8 @@ class CreateCommentsTable extends Migration
             $table->unsignedBigInteger('user_id');    
             $table->index('user_id');
 
-            // $table->unsignedBigInteger('post_id');    
-            // $table->index('post_id');
-
+            $table->unsignedBigInteger('post_id');    
+           $table->index('post_id');
         });
     }
 
